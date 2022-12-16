@@ -1,34 +1,54 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import { useState } from 'react';
 
-function App() {
-  const [count, setCount] = useState(0)
+import { ShoppingCart } from 'phosphor-react';
+
+import { GlobalStyles } from './styles/globalStyles';
+
+import { FeedbackModal } from './components/FeedbackModal';
+import { Button } from './components/Button';
+
+export function App() {
+  const [ isModalEnabled, setIsModalEnabled ] = useState<boolean>(false);
+
+  function handleModal() {
+    setIsModalEnabled(prev => !prev);
+  }
 
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
-  )
+    <>
+      <GlobalStyles />
+      <Button.Root handleClick={handleModal}>
+        <Button.Text>
+          Abrir modal
+        </Button.Text>
+      </Button.Root>
+      {
+        isModalEnabled && (
+          <FeedbackModal.Root>
+            <FeedbackModal.Status status='success' />
+            <FeedbackModal.Text>
+              O produto foi adicionado ao carrinho!
+            </FeedbackModal.Text>
+            <FeedbackModal.Actions>
+              <Button.Root
+                handleClick={handleModal}
+              >
+                <Button.Text size="sm">
+                  Voltar as compras
+                </Button.Text>
+              </Button.Root>
+              <Button.Root
+                secondary
+                handleClick={handleModal}
+              >
+                <Button.Icon>
+                  <ShoppingCart weight="bold" size={16} />
+                </Button.Icon>
+              </Button.Root>
+            </FeedbackModal.Actions>
+          </FeedbackModal.Root>
+        )
+      }
+    </>
+  );
 }
-
-export default App
